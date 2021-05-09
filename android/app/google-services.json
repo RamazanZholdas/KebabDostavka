@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "76498434846",
+    "project_id": "kebabdostavka-94118",
+    "storage_bucket": "kebabdostavka-94118.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:76498434846:android:6879f7bb0c59f6001be70f",
+        "android_client_info": {
+          "package_name": "com.example.kebabdostavka"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "76498434846-r75p4dok228jjruar8tk2s2drtbjr862.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCNvn4_BcmVlS2UFwVYp2-_Iips5iXib8g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "76498434846-r75p4dok228jjruar8tk2s2drtbjr862.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
