@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kebabdostavka/HelpSection/help-section.dart';
+import 'package:kebabdostavka/services/Auth.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -38,6 +39,21 @@ class _HomePageState extends State<HomePage> {
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context)=> HelpSection()));
               }),
+          SizedBox(
+            width:10,
+          ),
+          IconButton(
+            icon: Icon(
+              Icons.exit_to_app_outlined,
+              color: Colors.orangeAccent,
+            ),
+            onPressed: (){
+              setState(() {
+                AuthService authService = AuthService();
+                authService.logOut();
+              });
+            },
+          )
         ],
       ),
       body: Container(
