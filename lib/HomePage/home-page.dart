@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kebabdostavka/HelpSection/help-section.dart';
+import 'package:kebabdostavka/LandingPage.dart';
 import 'package:kebabdostavka/services/Auth.dart';
 
 class HomePage extends StatefulWidget {
@@ -49,8 +50,8 @@ class _HomePageState extends State<HomePage> {
             ),
             onPressed: (){
               setState(() {
-                AuthService authService = AuthService();
-                authService.logOut();
+                AuthService().logOut();
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>LandingPage()));
               });
             },
           )
@@ -191,6 +192,8 @@ class _HomePageState extends State<HomePage> {
             ),
             Expanded(
               child: ListView(
+                /*itemCount: 6,
+                itemBuilder: null,*/
                 children: [
                   Container(
                     height: 150,

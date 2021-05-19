@@ -1,5 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:kebabdostavka/HomePage/home-page.dart';
 import 'package:kebabdostavka/sign-in-page/login-page.dart';
 import 'package:kebabdostavka/sign-in-page/registration-page.dart';
 
@@ -9,6 +12,21 @@ class ChoisePage extends StatefulWidget {
 }
 
 class _ChoisePageState extends State<ChoisePage> {
+  final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  final GoogleSignIn googleSignIn = GoogleSignIn();
+
+  googleSignInMethod() async {
+    final GoogleSignInAccount signInAccount = await googleSignIn.signIn();
+    final GoogleSignInAuthentication googleAuth =
+    await signInAccount.authentication;
+
+    final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken, idToken: googleAuth.idToken);
+
+    final User user =
+        (await firebaseAuth.signInWithCredential(credential)).user;
+  }
+
   Widget customRaisedButton(String text, Function func) {
     return RaisedButton(
       onPressed: func,
@@ -81,7 +99,12 @@ class _ChoisePageState extends State<ChoisePage> {
               SizedBox(
                 height: 30,
               ),
-              customRaisedButton('Sign in with google', null),
+              customRaisedButton('Sign in with google', (){
+                setState(() {
+                  googleSignInMethod();
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>HomePage()));
+                });
+              }),
             ],
           ),
         ),
