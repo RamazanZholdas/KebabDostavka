@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:kebabdostavka/HelpSection/help-section.dart';
+import 'package:kebabdostavka/HomePage/food-page.dart';
+import 'package:kebabdostavka/HomePage/korzina-page.dart';
 import 'package:kebabdostavka/LandingPage.dart';
 import 'package:kebabdostavka/services/Auth.dart';
 
@@ -9,6 +12,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final ref = FirebaseFirestore.instance.collection('data');
+
   @override
   Widget build(BuildContext context) {
     final double categoryHeight =
@@ -33,25 +38,15 @@ class _HomePageState extends State<HomePage> {
             width: 10,
           ),
           IconButton(
-              icon: Icon(
-                Icons.person,
-                color: Colors.orangeAccent,
-              ),
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context)=> HelpSection()));
-              }),
-          SizedBox(
-            width:10,
-          ),
-          IconButton(
             icon: Icon(
               Icons.exit_to_app_outlined,
               color: Colors.orangeAccent,
             ),
-            onPressed: (){
+            onPressed: () {
               setState(() {
                 AuthService().logOut();
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>LandingPage()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => LandingPage()));
               });
             },
           )
@@ -64,12 +59,17 @@ class _HomePageState extends State<HomePage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Text(
-                  'Корзина',
-                  style: TextStyle(
-                      color: Colors.grey,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20),
+                TextButton(
+                  onPressed: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>KorzinaPage()));
+                  },
+                  child: Text(
+                    'Корзина',
+                    style: TextStyle(
+                        color: Colors.grey,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20),
+                  ),
                 ),
                 Text(
                   'Меню',
@@ -97,7 +97,7 @@ class _HomePageState extends State<HomePage> {
                       decoration: BoxDecoration(
                           color: Colors.orange.shade400,
                           borderRadius:
-                          BorderRadius.all(Radius.circular(20.0))),
+                              BorderRadius.all(Radius.circular(20.0))),
                       child: Padding(
                         padding: EdgeInsets.all(12.0),
                         child: Column(
@@ -116,7 +116,7 @@ class _HomePageState extends State<HomePage> {
                             Text(
                               "осталось:20",
                               style:
-                              TextStyle(fontSize: 16, color: Colors.white),
+                                  TextStyle(fontSize: 16, color: Colors.white),
                             ),
                           ],
                         ),
@@ -129,7 +129,7 @@ class _HomePageState extends State<HomePage> {
                       decoration: BoxDecoration(
                           color: Colors.blue.shade400,
                           borderRadius:
-                          BorderRadius.all(Radius.circular(20.0))),
+                              BorderRadius.all(Radius.circular(20.0))),
                       child: Padding(
                         padding: EdgeInsets.all(12.0),
                         child: Column(
@@ -148,7 +148,7 @@ class _HomePageState extends State<HomePage> {
                             Text(
                               "осталось:20",
                               style:
-                              TextStyle(fontSize: 16, color: Colors.white),
+                                  TextStyle(fontSize: 16, color: Colors.white),
                             ),
                           ],
                         ),
@@ -161,7 +161,7 @@ class _HomePageState extends State<HomePage> {
                       decoration: BoxDecoration(
                           color: Colors.blue.shade400,
                           borderRadius:
-                          BorderRadius.all(Radius.circular(20.0))),
+                              BorderRadius.all(Radius.circular(20.0))),
                       child: Padding(
                         padding: EdgeInsets.all(12.0),
                         child: Column(
@@ -180,7 +180,7 @@ class _HomePageState extends State<HomePage> {
                             Text(
                               "осталось:20",
                               style:
-                              TextStyle(fontSize: 16, color: Colors.white),
+                                  TextStyle(fontSize: 16, color: Colors.white),
                             ),
                           ],
                         ),
@@ -191,149 +191,65 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             Expanded(
-              child: ListView(
-                /*itemCount: 6,
-                itemBuilder: null,*/
-                children: [
-                  Container(
-                    height: 150,
-                    margin: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 10),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                        color: Colors.white,
-                        boxShadow: [
-                          BoxShadow(
-                              color: Colors.black.withAlpha(100),
-                              blurRadius: 10.0),
-                        ]),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'SomeHavchik',
-                                style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+              child: StreamBuilder(
+                stream: ref.snapshots(),
+                builder: (context,AsyncSnapshot<QuerySnapshot> snapshot) {
+                  return ListView.builder(
+                      itemCount: snapshot.hasData ? snapshot.data.docs.length : 0,
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          onTap: (){
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>FoodPage(documentSnapshot: snapshot.data.docs[index],)));
+                          },
+                          child: Container(
+                            height: 150,
+                            margin: const EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 10),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                                color: Colors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Colors.black.withAlpha(100),
+                                      blurRadius: 10.0),
+                                ]),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        snapshot.data.docs[index].get('title'),
+                                        style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                                      ),
+                                      Text(
+                                        snapshot.data.docs[index].get('description'),
+                                        style: const TextStyle(fontSize: 17, color: Colors.grey),
+                                      ),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      Text(
+                                        snapshot.data.docs[index].get('price') + '\$',
+                                        style: const TextStyle(fontSize: 25, color: Colors.black, fontWeight: FontWeight.bold),
+                                      )
+                                    ],
+                                  ),
+                                  Icon(
+                                    Icons.local_pizza,
+                                    color: Colors.orangeAccent,
+                                    size: 70,
+                                  ),
+                                ],
                               ),
-                              Text(
-                                'Vid havchika',
-                                style: const TextStyle(fontSize: 17, color: Colors.grey),
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Text(
-                                '300\$',
-                                style: const TextStyle(fontSize: 25, color: Colors.black, fontWeight: FontWeight.bold),
-                              )
-                            ],
+                            ),
                           ),
-                          Icon(
-                            Icons.local_pizza,
-                            color: Colors.orangeAccent,
-                            size: 70,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Container(
-                    height: 150,
-                    margin: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 10),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                        color: Colors.white,
-                        boxShadow: [
-                          BoxShadow(
-                              color: Colors.black.withAlpha(100),
-                              blurRadius: 10.0),
-                        ]),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'SomeHavchik',
-                                style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-                              ),
-                              Text(
-                                'Vid havchika',
-                                style: const TextStyle(fontSize: 17, color: Colors.grey),
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Text(
-                                '300\$',
-                                style: const TextStyle(fontSize: 25, color: Colors.black, fontWeight: FontWeight.bold),
-                              )
-                            ],
-                          ),
-                          Icon(
-                            Icons.local_pizza,
-                            color: Colors.orangeAccent,
-                            size: 70,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Container(
-                    height: 150,
-                    margin: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 10),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                        color: Colors.white,
-                        boxShadow: [
-                          BoxShadow(
-                              color: Colors.black.withAlpha(100),
-                              blurRadius: 10.0),
-                        ]),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'SomeHavchik',
-                                style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-                              ),
-                              Text(
-                                'Vid havchika',
-                                style: const TextStyle(fontSize: 17, color: Colors.grey),
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Text(
-                                '300\$',
-                                style: const TextStyle(fontSize: 25, color: Colors.black, fontWeight: FontWeight.bold),
-                              )
-                            ],
-                          ),
-                          Icon(
-                            Icons.local_pizza,
-                            color: Colors.orangeAccent,
-                            size: 70,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
+                        );
+                      });
+                }
               ),
             ),
           ],
