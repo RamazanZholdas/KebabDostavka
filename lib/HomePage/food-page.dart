@@ -31,6 +31,19 @@ class _FoodPageState extends State<FoodPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.white,
+        elevation: 0,
+        title: Center(
+          child: Text(
+            widget.documentSnapshot.get('title'),
+            style: TextStyle(
+              color: Colors.orangeAccent,
+            ),
+          ),
+        ),
+      ),
       body: Container(
         child: SingleChildScrollView(
           child: Column(
@@ -41,10 +54,6 @@ class _FoodPageState extends State<FoodPage> {
                 Icons.local_pizza,
                 size: 150,
               ),
-              SizedBox(
-                height: 10,
-              ),
-              Center(child: Text(widget.documentSnapshot.get('title'))),
               SizedBox(height: 25,),
               Text(
                 widget.documentSnapshot.get('description'),

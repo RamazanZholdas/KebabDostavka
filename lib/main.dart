@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:kebabdostavka/HelpSection/help-section.dart';
 import 'package:kebabdostavka/HomePage/home-page.dart';
+import 'package:kebabdostavka/HomePage/payment-page.dart';
 import 'package:kebabdostavka/LandingPage.dart';
 import 'package:kebabdostavka/domain/user.dart';
 import 'package:kebabdostavka/services/Auth.dart';

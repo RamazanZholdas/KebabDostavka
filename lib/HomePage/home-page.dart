@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:kebabdostavka/HelpSection/faq-page.dart';
 import 'package:kebabdostavka/HelpSection/help-section.dart';
 import 'package:kebabdostavka/HomePage/food-page.dart';
 import 'package:kebabdostavka/HomePage/korzina-page.dart';
@@ -23,11 +24,14 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.white,
-        leading: Icon(
-          Icons.menu,
-          color: Colors.orangeAccent,
-        ),
         actions: [
+          Icon(
+            Icons.menu,
+            color: Colors.orangeAccent,
+          ),
+          SizedBox(
+            width: 262,
+          ),
           IconButton(
               icon: Icon(
                 Icons.search,
@@ -52,6 +56,43 @@ class _HomePageState extends State<HomePage> {
           )
         ],
       ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+              child: Text('Second Fridge'),
+            ),
+            ListTile(
+              title: Text(
+                  'FAQ'
+              ),
+              onTap: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>FaqPage()));
+              },
+            ),
+            ListTile(
+              title: Text('Свяжитесь с нами'),
+              onTap: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>HelpSection()));
+              },
+            ),
+            ListTile(
+              title: Text('Информация о приложении'),
+              onTap: null,
+            ),
+            ListTile(
+              title: Text('Корзина'),
+              onTap: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>KorzinaPage()));
+              },
+            )
+          ],
+        ),
+      ),
       body: Container(
         height: size.height,
         child: Column(
@@ -60,8 +101,9 @@ class _HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 TextButton(
-                  onPressed: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>KorzinaPage()));
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => KorzinaPage()));
                   },
                   child: Text(
                     'Корзина',
@@ -192,65 +234,85 @@ class _HomePageState extends State<HomePage> {
             ),
             Expanded(
               child: StreamBuilder(
-                stream: ref.snapshots(),
-                builder: (context,AsyncSnapshot<QuerySnapshot> snapshot) {
-                  return ListView.builder(
-                      itemCount: snapshot.hasData ? snapshot.data.docs.length : 0,
-                      itemBuilder: (context, index) {
-                        return GestureDetector(
-                          onTap: (){
-                            Navigator.push(context, MaterialPageRoute(builder: (context)=>FoodPage(documentSnapshot: snapshot.data.docs[index],)));
-                          },
-                          child: Container(
-                            height: 150,
-                            margin: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 10),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                                color: Colors.white,
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Colors.black.withAlpha(100),
-                                      blurRadius: 10.0),
-                                ]),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        snapshot.data.docs[index].get('title'),
-                                        style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-                                      ),
-                                      Text(
-                                        snapshot.data.docs[index].get('description'),
-                                        style: const TextStyle(fontSize: 17, color: Colors.grey),
-                                      ),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      Text(
-                                        snapshot.data.docs[index].get('price') + '\$',
-                                        style: const TextStyle(fontSize: 25, color: Colors.black, fontWeight: FontWeight.bold),
-                                      )
-                                    ],
-                                  ),
-                                  Icon(
-                                    Icons.local_pizza,
-                                    color: Colors.orangeAccent,
-                                    size: 70,
-                                  ),
-                                ],
+                  stream: ref.snapshots(),
+                  builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                    return ListView.builder(
+                        itemCount:
+                            snapshot.hasData ? snapshot.data.docs.length : 0,
+                        itemBuilder: (context, index) {
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => FoodPage(
+                                            documentSnapshot:
+                                                snapshot.data.docs[index],
+                                          )));
+                            },
+                            child: Container(
+                              height: 150,
+                              margin: const EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 10),
+                              decoration: BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20.0)),
+                                  color: Colors.white,
+                                  boxShadow: [
+                                    BoxShadow(
+                                        color: Colors.black.withAlpha(100),
+                                        blurRadius: 10.0),
+                                  ]),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20.0, vertical: 10),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          snapshot.data.docs[index]
+                                              .get('title'),
+                                          style: const TextStyle(
+                                              fontSize: 28,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        Text(
+                                          snapshot.data.docs[index]
+                                              .get('description'),
+                                          style: const TextStyle(
+                                              fontSize: 17, color: Colors.grey),
+                                        ),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        Text(
+                                          snapshot.data.docs[index]
+                                                  .get('price') +
+                                              '\$',
+                                          style: const TextStyle(
+                                              fontSize: 25,
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold),
+                                        )
+                                      ],
+                                    ),
+                                    Icon(
+                                      Icons.local_pizza,
+                                      color: Colors.orangeAccent,
+                                      size: 70,
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                        );
-                      });
-                }
-              ),
+                          );
+                        });
+                  }),
             ),
           ],
         ),
@@ -258,3 +320,24 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
+
+/*
+Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+              child: Text('Drawer Header'),
+            ),
+            ListTile(
+              title: Text(
+                'Faq'
+              ),
+            )
+          ],
+        ),
+      ),
+ */
